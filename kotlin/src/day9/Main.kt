@@ -15,11 +15,13 @@ fun main() {
 }
 
 fun part2(input: List<List<List<Int>>>) {
-    val result = input.sumOf { history ->
-        history
-            .map { it.first() }
-            .reduce { acc, n -> n - acc }
-    }
+    val result = input
+        .map { it.reversed() }
+        .sumOf { history ->
+            history
+                .map { it.first() }
+                .reduce { acc, n -> n - acc }
+        }
 
     println("Part 2 result: $result")
 }
