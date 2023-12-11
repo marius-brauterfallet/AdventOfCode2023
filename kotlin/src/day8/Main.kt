@@ -7,7 +7,7 @@ import kotlin.math.min
 fun main() {
     val input = getInput("day8", "input.txt").parseInput()
 
-//    part1(input)
+    part1(input)
     part2(input)
 }
 

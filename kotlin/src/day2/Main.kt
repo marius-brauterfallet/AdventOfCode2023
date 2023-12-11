@@ -26,13 +26,13 @@ fun part1(games: List<Game>, maxCubes: List<Pair<String, Int>>) {
 }
 
 fun part2(games: List<Game>) {
-    val result = games.map { game ->
+    val result = games.sumOf { game ->
         game.rounds
             .flatMap { it.cubeSets }
             .groupBy { it.first }
             .map { entry -> entry.value.maxBy { it.second }.second }
             .reduce { acc, n -> n * acc }
-    }.sum()
+    }
 
     println("Part 2 result: $result")
 }

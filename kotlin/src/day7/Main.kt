@@ -24,10 +24,10 @@ fun part2(input: List<Pair<List<Int>, Int>>) {
 fun getHandTypePart2(hand: List<Int>): Int {
     return if (hand.any { it == 1 } && !hand.all { it == 1 }) {
         val mostCommonValue = hand
-        .filter { it != 1 }
-        .groupBy { it }
-        .map { it.key to it.value.size }
-        .maxBy { it.second }.first
+            .filter { it != 1 }
+            .groupBy { it }
+            .map { it.key to it.value.size }
+            .maxBy { it.second }.first
 
         hand
             .map { if (it == 1) mostCommonValue else it }
@@ -36,7 +36,6 @@ fun getHandTypePart2(hand: List<Int>): Int {
         getHandTypePart1(hand)
     }
 }
-
 
 
 fun List<Pair<List<Int>, Int>>.transformToPart2Input() = map { (hand, bid) ->
