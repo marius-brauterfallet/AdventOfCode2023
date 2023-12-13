@@ -7,18 +7,29 @@ fun main() {
     val input = getInput("day11", "input.txt")
 
     part1(input)
+    part2(input)
+}
+
+fun part2(input: List<String>) {
+    val result = getResult(input, 999999)
+
+    println("Part 2 result: $result")
 }
 
 fun part1(input: List<String>) {
-    val result = input
-        .getGalaxiesWithExpansion()
-        .allUniquePairs()
-        .sumOf { (first, second) -> distanceBetweenGalaxies(first, second) }
+    val result = getResult(input)
 
     println("Part 1 result: $result")
 }
 
-private fun List<String>.getGalaxiesWithExpansion(): List<Pair<Int, Int>> {
+fun getResult(input: List<String>, expansionFactor: Int = 1): Long {
+    return input
+        .getGalaxiesWithExpansion(expansionFactor.toLong())
+        .allUniquePairs()
+        .sumOf { (first, second) -> distanceBetweenGalaxies(first, second) }
+}
+
+private fun List<String>.getGalaxiesWithExpansion(expansionFactor: Long): List<Pair<Long, Long>> {
     val xValuesWithoutGalaxies = first().mapIndexedNotNull { index, _ ->
         if (all { it[index] == '.' }) index else null
     }
@@ -34,8 +45,8 @@ private fun List<String>.getGalaxiesWithExpansion(): List<Pair<Int, Int>> {
     }.flatten()
 
     val galaxiesWithExpansion = galaxiesWithoutExpansion.map { galaxy ->
-        val newX = galaxy.first + xValuesWithoutGalaxies.count { galaxy.first > it }
-        val newY = galaxy.second + yValuesWithoutGalaxies.count { galaxy.second > it }
+        val newX = galaxy.first + (xValuesWithoutGalaxies.count { galaxy.first > it } * expansionFactor)
+        val newY = galaxy.second + (yValuesWithoutGalaxies.count { galaxy.second > it } * expansionFactor)
 
         newX to newY
     }
@@ -51,6 +62,6 @@ fun <T> List<T>.allUniquePairs(): List<Pair<T, T>> {
     }
 }
 
-fun distanceBetweenGalaxies(galaxy1: Pair<Int, Int>, galaxy2: Pair<Int, Int>): Int {
+fun distanceBetweenGalaxies(galaxy1: Pair<Long, Long>, galaxy2: Pair<Long, Long>): Long {
     return abs(galaxy1.first - galaxy2.first) + abs(galaxy1.second - galaxy2.second)
 }
