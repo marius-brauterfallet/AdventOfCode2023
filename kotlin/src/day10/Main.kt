@@ -21,6 +21,7 @@ fun main() {
     val day10 = Day10(input)
 
     day10.part1()
+    day10.part2()
 }
 
 
@@ -37,20 +38,23 @@ class Day10(val input: List<String>) {
     fun part1() {
         val connections = getConnections(startCoords)
 
-        val result = test(connections.first(), startCoords, 1) / 2
+        val result = solvePart1(connections.first(), startCoords, 1) / 2
 
         println("Part 1 result: $result")
     }
 
-    private tailrec fun test(coords: Pair<Int, Int>, previous: Pair<Int, Int>, length: Int): Int {
-        if (coords == startCoords) return length
+    fun part2() {
+        
+    }
 
+    private tailrec fun solvePart1(coords: Pair<Int, Int>, previous: Pair<Int, Int>, length: Int): Int {
+        if (coords == startCoords) return length
 
         val next = getConnections(coords)
             .filterNot { it == previous }
             .single()
 
-        return test(next, coords, length + 1)
+        return solvePart1(next, coords, length + 1)
     }
 
     private fun neighborCoords(coords: Pair<Int, Int>): List<Pair<Int, Int>> {
@@ -123,5 +127,6 @@ class Day10(val input: List<String>) {
 
         output.forEach(::println)
     }
+
 }
 
