@@ -16,12 +16,12 @@ S is the starting position of the animal; there is a pipe on this tile, but your
 */
 
 fun main() {
-    val input = getInput("day10", "test.txt")
+    val input = getInput("day10", "input.txt")
 
     val day10 = Day10(input)
 
     day10.part1()
-    day10.part2()
+    part2(input)
 }
 
 
@@ -43,10 +43,6 @@ class Day10(val input: List<String>) {
         println("Part 1 result: $result")
     }
 
-    fun part2() {
-        
-    }
-
     private tailrec fun solvePart1(coords: Pair<Int, Int>, previous: Pair<Int, Int>, length: Int): Int {
         if (coords == startCoords) return length
 
@@ -65,7 +61,7 @@ class Day10(val input: List<String>) {
 
     private fun getConnections(coords: Pair<Int, Int>): List<Pair<Int, Int>> {
         return neighborCoords(coords).filter {
-            connectsToCoords(coords, it).also(::println)
+            connectsToCoords(coords, it)
         }
     }
 
