@@ -11,7 +11,7 @@ fun part2(input: List<String>) {
     val result = input
         .toTwoDimensionalArray()
         .let { map ->
-            val path = findPath(map)
+            val path = findPath(map).toSet()
 
             map.mapIndexed { y, line ->
                 line.mapIndexed { x, c ->
