@@ -6,10 +6,19 @@ fun main() {
     val input = getInput("day13", "input.txt").parseInput()
 
     part1(input)
+    part2(input)
+}
+
+fun part2(input: List<List<List<Char>>>) {
+    val result = findReflections(input, 1).sumOf { (dir, linesToCount) ->
+        if (dir == 'H') 100 * linesToCount else linesToCount
+    }
+
+    println("Part 2 result: $result")
 }
 
 fun part1(input: List<List<List<Char>>>) {
-    val result = findReflections(input).sumOf { (dir, linesToCount) ->
+    val result = findReflections(input, 0).sumOf { (dir, linesToCount) ->
         if (dir == 'H') 100 * linesToCount else linesToCount
     }
 
@@ -21,59 +30,67 @@ fun part1(input: List<List<List<Char>>>) {
  * reflection. The second element represents the index of the row to the right of the line of reflection in the case of
  * a vertical reflection, or under the line of reflection in the case of a horizontal reflection.
  */
-fun findReflections(input: List<List<List<Char>>>) = input.map(::findReflection)
+fun findReflections(input: List<List<List<Char>>>, targetFaults: Int = 0) = input.map { findReflection(it, targetFaults)}
 
-fun findReflection(map: List<List<Char>>): Pair<Char, Int> {
-    val result = checkHorizontalReflection(map) ?: checkVerticalReflection(map)
+fun findReflection(map: List<List<Char>>, targetFaults: Int): Pair<Char, Int> {
+    val result = checkHorizontalReflection(map, targetFaults) ?: checkVerticalReflection(map, targetFaults)
 
     return result!!
 }
 
-fun checkVerticalReflection(map: List<List<Char>>): Pair<Char, Int>? {
+fun checkVerticalReflection(map: List<List<Char>>, targetFaults: Int): Pair<Char, Int>? {
     for (x in 1..<map.first().size) {
-        if (checkVerticalLineOfReflection(map, x)) return 'V' to x
+        if (checkVerticalLineOfReflection(map, x) == targetFaults) return 'V' to x
     }
 
     return null
 }
 
-fun checkVerticalLineOfReflection(map: List<List<Char>>, lineToCheck: Int): Boolean {
+fun checkVerticalLineOfReflection(map: List<List<Char>>, lineToCheck: Int): Int {
     var high = lineToCheck
     var low = lineToCheck - 1
+
+    var faults = 0
 
     while (low >= 0 && high < map.first().size) {
         val line1 = map.map { it[low] }
         val line2 = map.map { it[high] }
 
-        if (line1 != line2) return false
+        faults += line1.zip(line2).count {
+            it.first != it.second
+        }
 
         low--
         high++
     }
 
-    return true
+    return faults
 }
 
-fun checkHorizontalReflection(map: List<List<Char>>): Pair<Char, Int>? {
+fun checkHorizontalReflection(map: List<List<Char>>, targetFaults: Int): Pair<Char, Int>? {
     for (y in 1..<map.size) {
-        if (checkHorizontalLineOfReflection(map, y)) return 'H' to y
+        if (checkHorizontalLineOfReflection(map, y) == targetFaults) return 'H' to y
     }
 
     return null
 }
 
-fun checkHorizontalLineOfReflection(map: List<List<Char>>, lineToCheck: Int): Boolean {
+fun checkHorizontalLineOfReflection(map: List<List<Char>>, lineToCheck: Int): Int {
     var high = lineToCheck
     var low = lineToCheck - 1
 
+    var faults = 0
+
     while (low >= 0 && high < map.size) {
-        if (map[low] != map[high]) return false
+        faults += map[low].zip(map[high]).count {
+            it.first != it.second
+        }
 
         high++
         low--
     }
 
-    return true
+    return faults
 }
 
 private fun List<String>.parseInput(): List<List<List<Char>>> {
