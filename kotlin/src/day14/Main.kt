@@ -5,7 +5,7 @@ import getInput
 fun main() {
     val input = getInput("day14", "input.txt").parseInput()
 
-//    part1(input)
+    part1(input)
     part2(input)
 }
 
