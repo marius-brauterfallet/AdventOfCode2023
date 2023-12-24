@@ -10,13 +10,33 @@ fun main() {
     val input = getInput("day16", "input.txt").map { it.toList() }
 
     part1(input)
+    part2(input)
 }
 
 fun part1(input: List<List<Char>>) {
+    val result = findEnergizedSquares(input, 0 to 0, 'E')
+
+    println("Part 1 result: $result")
+}
+
+fun part2(input: List<List<Char>>) {
+    val result = List(input.size) {
+        val east = findEnergizedSquares(input, 0 to it, 'E')
+        val south = findEnergizedSquares(input, it to 0, 'S')
+        val west = findEnergizedSquares(input, input.size - 1 to it, 'W')
+        val north = findEnergizedSquares(input, it to input.size - 1, 'N')
+
+        listOf(east, south, west, north).max()
+    }.max()
+
+    println("Part 2 result: $result")
+}
+
+fun findEnergizedSquares(input: List<List<Char>>, startSquare: Pair<Int, Int>, startDirection: Char): Int {
     val energizedSquares = mutableSetOf<Pair<Int, Int>>()
     val examinedSquares = mutableSetOf<Pair<Pair<Int, Int>, Char>>()
 
-    tailrec fun part1rec(square: Pair<Int, Int> = 0 to 0, direction: Char = 'E') {
+    tailrec fun part1rec(square: Pair<Int, Int> = startSquare, direction: Char = startDirection) {
         if (square to direction in examinedSquares
             || square.first < 0
             || square.second < 0
@@ -80,5 +100,5 @@ fun part1(input: List<List<Char>>) {
 
     part1rec()
 
-    println("Part 1 result: ${energizedSquares.count()}")
+    return energizedSquares.count()
 }
